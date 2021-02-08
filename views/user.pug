@@ -1,0 +1,21 @@
+extends layout
+
+block content 
+ h2 Users
+ div.table
+  table
+   tr
+    th Name
+    th Email
+    th Age
+    th Address
+    th ID
+   each val in users
+    tr
+     td=`${val.fname} ${val.lname}`
+     td=val.email
+     td=val.age
+     td=`${val.address.country}, ${val.address.zip}`
+     td=val._id
+     td
+      a(href=`/edit/${val.fname}`) Edit

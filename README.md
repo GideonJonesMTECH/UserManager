@@ -11,10 +11,8 @@ Can edit an existing user --5 points
 Can delete a user --5 points
 
 Can sort user alphabetically based on at least one of the user attributes --5 points
-
-Ascending order
-
-Descending order
+-Ascending order
+-Descending order
 
 Can search a user by first name and or last name --5 points
 
