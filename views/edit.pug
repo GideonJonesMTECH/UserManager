@@ -1,4 +1,24 @@
 extends layout
 
 block content
- h2 Editing #users
+ h2=`Editing ${users.fname} ${users.lname}`
+ form(action=`/edit/${users.fname}`, method = 'POST')
+  label(for="fname") First Name
+  input(type = "text", name = "fname", value=users.fname)
+  br
+  label(for="lname") Last Name
+  input(type = "text", name = "lname", value=users.lname)
+  br
+  label(for="email") Email
+  input(type="email", name = "email", value=users.email)
+  br
+  label(for="age") Age
+  input(type="number", name="age", value=users.age)
+  br
+  label(for="country") Country
+  input(type = "text", name = "country", value=users.address.country)
+  br
+  label(for="zip") Zip
+  input(type = "text", name = "zip", value=users.address.zip)
+  br
+  input(type="submit")
