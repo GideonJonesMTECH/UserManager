@@ -26,7 +26,6 @@ const userSchema = new mongoose.Schema({
   lname: String,
   email: String,
   age: Number,
-  userId: Number,
 });
 
 const Users = mongoose.model("newusers", userSchema);
@@ -43,94 +42,49 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/find/:user", async (req, res) => {
-  let user = req.params.user;
-  console.log(`User Finding: ${user}`);
+app.get("/find/:id", async (req, res) => {
+  let id = req.params.id;
+  console.log(`User Finding: ${id}`);
 
-  Users.find({ fname: user }, (err, data) => {
+  Users.find({ _id: id }, (err, data) => {
     if (data.length == 0) {
-      Users.find({ lname: user }, (err, data) => {
-        if (data.length == 0) {
-          console.log(`${user} not found.`);
-          res.render("error");
-          return;
-        }
-        console.log("User Found by Last Name");
-        if (err) console.log(err);
-        res.render("user", { users: data });
-        return;
-      });
+      console.log(`${id} not found.`);
+      res.render("error");
+      return;
     } else {
-      console.log("User Found by First Name");
+      console.log("User Found by ID");
       if (err) console.log(err);
       console.log(data);
       res.render("user", { users: data });
       return;
     }
   });
-
-  // let foundResults = await FindUser(user);
-  // res.render("user", { users: foundResults });
 });
 
-app.get("/edit/:user", async (req, res) => {
-  let user = req.params.user;
-  console.log(`User Finding: ${user}`);
-  Users.find({ fname: user }, (err, data) => {
+app.get("/edit/:id", async (req, res) => {
+  let id = req.params.id;
+  console.log(`User Finding: ${id}`);
+  Users.find({ _id: id }, (err, data) => {
     if (data.length == 0) {
-      Users.find({ lname: user }, (err, data) => {
-        if (data.length == 0) {
-          console.log(`${user} not found.`);
-          res.render("error");
-          return;
-        }
-        console.log("User Found by Last Name");
-        if (err) console.log(err);
-        res.render("edit", { users: data });
-        return;
-      });
+      res.render("error");
+      if (err) console.log(err);
+      return;
     } else {
-      console.log("User Found by First Name");
+      console.log("User Found by id");
       if (err) console.log(err);
       res.render("edit", { users: data[0] });
-      return;
     }
   });
-  // let foundResults = await FindUser(user);
-  // res.render("edit", { users: foundResults });
 });
 
-app.post("/edit/:user", (req, res) => {
-  let user = req.params.user;
+app.post("/edit/:id", (req, res) => {
+  let user = req.params.id;
   console.log(`Editing ${user}`);
-  let userId = "";
-
-  Users.find({ fname: user }, (err, data) => {
-    if (data.length == 0) {
-      Users.find({ lname: user }, (err, data) => {
-        if (data.length == 0) {
-          console.log(`${user} not found.`);
-          res.render("error");
-          return;
-        }
-        console.log("User Found by Last Name");
-        if (err) console.log(err);
-        userId = data[0]._id;
-        return;
-      });
-    } else {
-      console.log("User Found by First Name");
-      if (err) console.log(err);
-      console.log(data);
-      userId = data[0]._id;
-      return;
-    }
-  });
-
-  let updatedUser = Users.findOneAndUpdate(
-    { _id: userId },
+  console.log(`Zip: ${req.body.zip}`);
+  Users.findByIdAndUpdate(
+    user,
     {
-      _id: userId,
+      _id: user,
       fname: req.body.fname,
       lname: req.body.lname,
       email: req.body.email,
@@ -143,7 +97,8 @@ app.post("/edit/:user", (req, res) => {
     { new: true, upsert: true }
   );
   console.log("Updated User...");
-  console.log(updatedUser);
+  // console.log(updatedUser);
+  res.send("User Updated");
 });
 
 app.get("/newUser", (req, res) => {
