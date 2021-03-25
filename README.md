@@ -4,13 +4,13 @@ Shows 10 default users. This is optional
 
 Each user should have the following attributes: User id, First name, Last name, Email address, and Age (password and role are optional) --5 points
 
-Can add a new user --5 points
+Can add a new user --5 points --2 USERS CREATED ON USER CREATION, FIX
 
 Can edit an existing user --5 points
 
-Can delete a user --5 points
+Can delete a user --5 points --NEED
 
-Can sort user alphabetically based on at least one of the user attributes --5 points
+Can sort user alphabetically based on at least one of the user attributes --5 points --NEED
 -Ascending order
 -Descending order
 
