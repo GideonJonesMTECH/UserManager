@@ -42,21 +42,33 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/find/:id", async (req, res) => {
-  let id = req.params.id;
-  console.log(`User Finding: ${id}`);
+app.get("/find/:user", async (req, res) => {
+  let user = req.params.user;
+  console.log(`User Finding: ${user}`);
 
-  Users.find({ _id: id }, (err, data) => {
+  Users.find({ fname: user }, (err, data) => {
+    //attempt to find by first name
     if (data.length == 0) {
-      console.log(`${id} not found.`);
-      res.render("error");
-      return;
+      //cannot find by firstname
+      Users.find({ lname: user }, (err, data) => {
+        //attempt to find by last name
+        if (data.length == 0) {
+          //cannot find by lastname
+          console.log(`${user} not found.`);
+          res.render("error"); //cannot find user
+        } else {
+          //found by lastname
+          console.log("User Found by Last Name");
+          if (err) console.log(err);
+          res.render("user", { users: data }); //render all with lastname
+        }
+      });
     } else {
-      console.log("User Found by ID");
+      //found by firstname
+      console.log("User Found by First Name");
       if (err) console.log(err);
       console.log(data);
-      res.render("user", { users: data });
-      return;
+      res.render("user", { users: data }); //render all with firstname
     }
   });
 });
@@ -122,7 +134,7 @@ app.post("/newUser", (req, res) => {
         zip: req.body.zip,
       },
     },
-    { upsert: true },
+    { upsert: false, new: false },
     (err, data) => {
       Users.find({}, (err, data) => {
         if (err) console.log(err);
