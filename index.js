@@ -94,15 +94,42 @@ app.post("/edit/:id", (req, res) => {
         zip: req.body.zip,
       },
     },
-    { new: true, upsert: true }
+    { new: true, upsert: true },
+    (err, data) => {
+      Users.find({}, (err, data) => {
+        if (err) console.log(err);
+        res.render("success");
+      });
+    }
   );
-  console.log("Updated User...");
-  // console.log(updatedUser);
-  res.send("User Updated");
 });
 
 app.get("/newUser", (req, res) => {
   res.render("new");
+});
+
+app.post("/newUser", (req, res) => {
+  console.log(`Creating ${req.body.fname}`);
+  console.log(`Zip: ${req.body.zip}`);
+  Users.create(
+    {
+      fname: req.body.fname,
+      lname: req.body.lname,
+      email: req.body.email,
+      age: req.body.age,
+      address: {
+        country: req.body.country,
+        zip: req.body.zip,
+      },
+    },
+    { upsert: true },
+    (err, data) => {
+      Users.find({}, (err, data) => {
+        if (err) console.log(err);
+        res.render("success");
+      });
+    }
+  );
 });
 
 app.listen(port, () => {

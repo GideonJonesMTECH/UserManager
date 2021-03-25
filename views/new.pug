@@ -1,4 +1,24 @@
 extends layout
 
 block content
- h1 New Users
+ h2 Making a New User
+ form(action='/newUser', method = 'POST')
+  label(for="fname") First Name
+  input(type = "text", name = "fname", placeholder="First Name")
+  br
+  label(for="lname") Last Name
+  input(type = "text", name = "lname", placeholder="Last Name")
+  br
+  label(for="email") Email
+  input(type="email", name = "email", placeholder="sample@email.com")
+  br
+  label(for="age") Age
+  input(type="number", name="age", placeholder="100")
+  br
+  label(for="country") Country
+  input(type = "text", name = "country", placeholder="Country")
+  br
+  label(for="zip") Zip
+  input(type = "text", name = "zip", placeholder="Zipcode")
+  br
+  input(type="submit")
