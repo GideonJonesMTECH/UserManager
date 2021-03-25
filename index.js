@@ -108,10 +108,7 @@ app.post("/edit/:id", (req, res) => {
     },
     { new: true, upsert: true },
     (err, data) => {
-      Users.find({}, (err, data) => {
-        if (err) console.log(err);
-        res.render("success");
-      });
+      res.render("success");
     }
   );
 });
@@ -136,10 +133,7 @@ app.post("/newUser", (req, res) => {
     },
     { upsert: false, new: false },
     (err, data) => {
-      Users.find({}, (err, data) => {
-        if (err) console.log(err);
-        res.render("success");
-      });
+      res.render("success");
     }
   );
 });
