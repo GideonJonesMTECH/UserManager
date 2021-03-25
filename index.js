@@ -108,7 +108,7 @@ app.post("/edit/:id", (req, res) => {
     },
     { new: true, upsert: true },
     (err, data) => {
-      res.render("success");
+      res.render("success", { message: "Edited" });
     }
   );
 });
@@ -133,9 +133,40 @@ app.post("/newUser", (req, res) => {
     },
     { upsert: false, new: false },
     (err, data) => {
-      res.render("success");
+      res.render("success", { message: "Created" });
     }
   );
+});
+
+app.get("/delete/:id", (req, res) => {
+  let id = req.params.id;
+  Users.find({ _id: id }, (err, data) => {
+    if (data.length == 0) {
+      res.render("error");
+      if (err) console.log(err);
+      return;
+    } else {
+      console.log("User Found by id");
+      if (err) console.log(err);
+      let deleteUserConfirmation = confirm(
+        `Delete ${data[0].fname} ${data[0].lname}?`
+      );
+      if (deleteUserConfirmation) {
+        Users.findByIdAndDelete(id, (err, data) => {
+          res.render("success", { message: "Deleted" });
+        });
+      } else {
+        res.render("success", { message: "Not Deleted" });
+      }
+    }
+  });
+});
+
+app.post("delete/:id", (req, res) => {
+  let id = req.params.id;
+  Users.findByIdAndDelete(id, (err, data) => {
+    res.render("success", { message: "Deleted" });
+  });
 });
 
 app.listen(port, () => {
