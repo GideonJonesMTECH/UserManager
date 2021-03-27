@@ -36,7 +36,7 @@ app.set("view engine", "pug");
 
 app.get("/", (req, res) => {
   console.log("Home");
-  Users.find({}, null, { sort: { lname: -1 } }, (err, data) => {
+  Users.find({}, (err, data) => {
     if (err) console.log(err);
     res.render("user", { users: data });
   });
@@ -199,8 +199,8 @@ app.post("/newUser", (req, res) => {
   );
 });
 
-app.get("/delete", (req, res) => {
-  let id = req.body.id;
+app.get("/delete/:id", (req, res) => {
+  let id = req.params.id;
   Users.find({ _id: id }, (err, data) => {
     if (data.length == 0) {
       res.render("error");

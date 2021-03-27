@@ -3,7 +3,7 @@ extends Layout
 block content 
  h2=`Deleting ${users.fname} ${users.lname}`
  h3 Are you Sure you want to delete this user?
- form(action=`/delete/`, method = 'POST')
+ form(action=`/delete`, method = 'POST')
   input(type="hidden", name="id", value=users.id)
   input(type="submit") 
  h3 If not, click the 'Home' Link to go back to the user list
