@@ -36,10 +36,73 @@ app.set("view engine", "pug");
 
 app.get("/", (req, res) => {
   console.log("Home");
-  Users.find({}, (err, data) => {
+  Users.find({}, null, { sort: { lname: -1 } }, (err, data) => {
     if (err) console.log(err);
     res.render("user", { users: data });
   });
+});
+
+app.get("/sort", (req, res) => {
+  console.log("Sort");
+  res.render("sortOptions");
+});
+
+app.get("/sort/:sorting/:acendOrDecend", (req, res) => {
+  let sorting = req.params.sorting;
+  let acendOrDecend = req.params.acendOrDecend;
+  let acendNumb = 0;
+
+  if (acendOrDecend == "acending") {
+    acendNumb = 1;
+  } else {
+    acendNumb = -1;
+  }
+  switch (sorting) {
+    case "fname":
+      Users.find({}, null, { sort: { fname: acendNumb } }, (err, data) => {
+        if (err) console.log(err);
+        res.render("user", { users: data });
+      });
+      break;
+    case "lname":
+      Users.find({}, null, { sort: { lname: acendNumb } }, (err, data) => {
+        if (err) console.log(err);
+        res.render("user", { users: data });
+      });
+      break;
+    case "email":
+      Users.find({}, null, { sort: { email: acendNumb } }, (err, data) => {
+        if (err) console.log(err);
+        res.render("user", { users: data });
+      });
+      break;
+    case "age":
+      Users.find({}, null, { sort: { age: acendNumb } }, (err, data) => {
+        if (err) console.log(err);
+        res.render("user", { users: data });
+      });
+      break;
+    case "zip":
+      Users.find({}, null, { sort: { zip: acendNumb } }, (err, data) => {
+        if (err) console.log(err);
+        res.render("user", { users: data });
+      });
+      break;
+    case "country":
+      Users.find({}, null, { sort: { country: acendNumb } }, (err, data) => {
+        if (err) console.log(err);
+        res.render("user", { users: data });
+      });
+      break;
+    case "id":
+      Users.find({}, null, { sort: { id: acendNumb } }, (err, data) => {
+        if (err) console.log(err);
+        res.render("user", { users: data });
+      });
+      break;
+    default:
+      break;
+  }
 });
 
 app.get("/find/:user", async (req, res) => {
@@ -119,7 +182,6 @@ app.get("/newUser", (req, res) => {
 
 app.post("/newUser", (req, res) => {
   console.log(`Creating ${req.body.fname}`);
-  console.log(`Zip: ${req.body.zip}`);
   Users.create(
     {
       fname: req.body.fname,
@@ -131,39 +193,28 @@ app.post("/newUser", (req, res) => {
         zip: req.body.zip,
       },
     },
-    { upsert: false, new: false },
     (err, data) => {
       res.render("success", { message: "Created" });
     }
   );
 });
 
-app.get("/delete/:id", (req, res) => {
-  let id = req.params.id;
+app.get("/delete", (req, res) => {
+  let id = req.body.id;
   Users.find({ _id: id }, (err, data) => {
     if (data.length == 0) {
       res.render("error");
       if (err) console.log(err);
-      return;
     } else {
       console.log("User Found by id");
       if (err) console.log(err);
-      let deleteUserConfirmation = confirm(
-        `Delete ${data[0].fname} ${data[0].lname}?`
-      );
-      if (deleteUserConfirmation) {
-        Users.findByIdAndDelete(id, (err, data) => {
-          res.render("success", { message: "Deleted" });
-        });
-      } else {
-        res.render("success", { message: "Not Deleted" });
-      }
+      res.render("delete", { users: data[0] });
     }
   });
 });
 
-app.post("delete/:id", (req, res) => {
-  let id = req.params.id;
+app.post("/delete", (req, res) => {
+  let id = req.body.id;
   Users.findByIdAndDelete(id, (err, data) => {
     res.render("success", { message: "Deleted" });
   });
@@ -172,25 +223,3 @@ app.post("delete/:id", (req, res) => {
 app.listen(port, () => {
   console.log(`App started and running on Port ${port}`);
 });
-
-// function FindUser(findName) {
-//   Users.find({ fname: findName }, (err, data) => {
-//     if (data.length == 0) {
-//       Users.find({ lname: findName }, (err, data) => {
-//         if (data.length == 0) {
-//           console.log(`${findName} not found.`);
-//           return "ERROR";
-//         }
-//         console.log("User Found by Last Name");
-//         if (err) console.log(err);
-//         console.log(data[0]);
-//         return data[0];
-//       });
-//     } else {
-//       console.log("User Found by First Name");
-//       if (err) console.log(err);
-//       console.log(data[0]);
-//       return data[0];
-//     }
-//   });
-// }
